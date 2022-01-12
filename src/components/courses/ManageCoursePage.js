@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 const getCourseBySlug = (slug,courses) => {
     let course=newCourse
-    courses.map((element)=>{
+    courses?.map((element)=>{
         if(element.slug===slug) course=element
     })
 
@@ -19,12 +19,13 @@ const getCourseBySlug = (slug,courses) => {
 }    
 
 
-function ManageCoursePage({ 
+export function ManageCoursePage({ 
     ...props 
     }) {
     const location = useLocation()
     const slug = location.pathname.substring(8)
-    const {courses, authors} = useSelector((state)=>state)
+    
+    let {courses, authors} = useSelector((state)=>state)
 
     let currentCourse = getCourseBySlug(slug, courses)
 
@@ -35,13 +36,13 @@ function ManageCoursePage({
     
     let navigate = useNavigate()
     useEffect(()=>{
-        if(courses.length === 0 ){
+        if(courses?.length === 0 ){
             props.loadCourses().catch(error => {
                 alert("Loading courses failed" + error);
             });
         }
         
-        if(authors.length === 0 ){
+        if(authors?.length === 0 ){
             props.loadAuthors().catch(error => {
                 alert("Loading authors failed" + error);
             });
@@ -90,13 +91,13 @@ function ManageCoursePage({
     }
 
     return (
-        authors.length === 0 || courses.length === 0 ? (
+        (authors?.length === 0 || courses?.length === 0) ? (
             <Spinner/>
         ) :
            (<CourseForm 
                 course={course} 
                 errors={errors} 
-                authors={authors} 
+                authors={authors ? authors : []} 
                 onChange={handleChange} 
                 onSave={handleSave}
                 saving={saving}

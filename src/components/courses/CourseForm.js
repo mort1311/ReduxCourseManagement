@@ -32,7 +32,7 @@ const CourseForm = ({
         label="Author"
         value={course.authorId || ""}
         defaultOption="Select Author"
-        options={authors.map(author => ({
+        options={authors?.map(author => ({
           value: author.id,
           text: author.name
         }))}
